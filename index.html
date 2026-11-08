@@ -144,6 +144,38 @@
         </div>
       </div>
 
+      <!-- 3D Visualization & Surgical Overlays -->
+      <div class="control-panel-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            3D Display & Surgical Options
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <button id="btnToggleRecon" class="quick-btn" style="padding: 7px 10px; font-size: 0.76rem; width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;">
+            <span>🔬 LaPrade Anatomic Reconstruction (Tunnels & Grafts)</span>
+            <span id="badgeRecon" style="color: #64748b;">OFF</span>
+          </button>
+
+          <button id="btnTogglePatella" class="quick-btn" style="padding: 7px 10px; font-size: 0.76rem; width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;">
+            <span>🦴 Patella & Extensor Mechanism</span>
+            <span id="badgePatella" style="color: #38bdf8;">ON</span>
+          </button>
+
+          <button id="btnToggleXray" class="quick-btn" style="padding: 7px 10px; font-size: 0.76rem; width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;">
+            <span>💡 X-Ray / Translucent Bone Mode</span>
+            <span id="badgeXray" style="color: #64748b;">OFF</span>
+          </button>
+
+          <button id="btnToggleLandmarks" class="quick-btn" style="padding: 7px 10px; font-size: 0.76rem; width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;">
+            <span>📍 Anatomical Landmarks (18.5 mm Pin)</span>
+            <span id="badgeLandmarks" style="color: #38bdf8;">ON</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Kinematics & Applied Loads Section -->
       <div class="control-panel-section">
         <div class="section-header">

@@ -144,6 +144,55 @@
     // Quick force buttons
     setupQuickButtons();
 
+    // 3D Visualizer Toggles
+    var btnToggleRecon = document.getElementById("btnToggleRecon");
+    if (btnToggleRecon) {
+      btnToggleRecon.addEventListener("click", function() {
+        var active = window.Knee3DViewer.toggleSurgicalReconstruction();
+        var badge = document.getElementById("badgeRecon");
+        if (badge) {
+          badge.textContent = active ? "ON" : "OFF";
+          badge.style.color = active ? "#10b981" : "#64748b";
+        }
+      });
+    }
+
+    var btnTogglePatella = document.getElementById("btnTogglePatella");
+    if (btnTogglePatella) {
+      btnTogglePatella.addEventListener("click", function() {
+        var active = window.Knee3DViewer.togglePatella();
+        var badge = document.getElementById("badgePatella");
+        if (badge) {
+          badge.textContent = active ? "ON" : "OFF";
+          badge.style.color = active ? "#38bdf8" : "#64748b";
+        }
+      });
+    }
+
+    var btnToggleXray = document.getElementById("btnToggleXray");
+    if (btnToggleXray) {
+      btnToggleXray.addEventListener("click", function() {
+        var active = window.Knee3DViewer.toggleXrayMode();
+        var badge = document.getElementById("badgeXray");
+        if (badge) {
+          badge.textContent = active ? "ON" : "OFF";
+          badge.style.color = active ? "#38bdf8" : "#64748b";
+        }
+      });
+    }
+
+    var btnToggleLandmarks = document.getElementById("btnToggleLandmarks");
+    if (btnToggleLandmarks) {
+      btnToggleLandmarks.addEventListener("click", function() {
+        var active = window.Knee3DViewer.toggleLandmarks();
+        var badge = document.getElementById("badgeLandmarks");
+        if (badge) {
+          badge.textContent = active ? "ON" : "OFF";
+          badge.style.color = active ? "#38bdf8" : "#64748b";
+        }
+      });
+    }
+
     // Camera view buttons
     var camBtns = document.querySelectorAll(".cam-btn");
     camBtns.forEach(function(btn) {
