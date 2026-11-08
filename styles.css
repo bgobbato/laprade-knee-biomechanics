@@ -417,6 +417,57 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: radial-gradient(circle at 50% 50%, #17223b 0%, #0a0e17 80%);
 }
 
+/* Anatomical Mesh Fidelity Badge (Top-Left) */
+.mesh-fidelity-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(10, 14, 23, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 25;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.mesh-fidelity-badge .badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+  animation: pulse 1.8s infinite;
+}
+
+.mesh-fidelity-badge.loaded {
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.mesh-fidelity-badge.loaded .badge-dot {
+  background: var(--accent-emerald);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.85);
+  animation: none;
+}
+
+.mesh-fidelity-badge.fallback {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.mesh-fidelity-badge.fallback .badge-dot {
+  background: var(--accent-amber);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.85);
+  animation: none;
+}
+
 /* Telemetry HUD Overlay (Top-Right) */
 .telemetry-hud {
   position: absolute;

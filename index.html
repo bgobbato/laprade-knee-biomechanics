@@ -8,6 +8,7 @@
   <!-- Three.js & OrbitControls from reliable CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
 </head>
 <body>
 
@@ -282,6 +283,12 @@
       <!-- TAB 1: 3D ANATOMICAL VIEWPORT -->
       <div id="view-3d" class="view-container active">
         <div id="viewport3d"></div>
+
+        <!-- Anatomical Mesh Fidelity Status Badge -->
+        <div class="mesh-fidelity-badge" id="meshFidelityBadge">
+          <span class="badge-dot"></span>
+          <span id="meshFidelityText">Loading High-Fidelity CT Anatomical Meshes (BodyParts3D)...</span>
+        </div>
 
         <!-- Telemetry HUD Overlay -->
         <div class="telemetry-hud">
