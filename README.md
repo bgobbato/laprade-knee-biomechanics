@@ -15,11 +15,17 @@ The mathematical kinematic engine and 3D visual models are built directly from p
 ## 🎯 Key Capabilities
 
 ### 1. 3D Anatomical & Biomechanical Knee Model (WebGL / Three.js)
-- **High-Fidelity Parametric Anatomy:** Distal Femur (with lateral epicondyle and popliteal sulcus), Proximal Tibia (plateaus, intercondylar spines, and popliteus muscle insertion footprint), Proximal Fibula (fibular head and styloid process), and Menisci (with popliteal hiatus aperture).
+- **High-Fidelity CT-Segmented Bone Anatomy (BodyParts3D):**
+  * Real segmented human bones: Distal Femur (`FMA24474`), Proximal Tibia (`FMA24477`), Proximal Fibula (`FMA24480`), Patella (`FMA24486`), and Popliteus Muscle Belly (`FMA22591`).
+  * 1:1 scale true millimeter calibration centered at knee joint line $(0, 0, 0)$.
+  * High-precision anatomical facets: popliteal sulcus, lateral epicondyle, fibular styloid apex, Gerdy's tubercle, and tibial tuberosity.
 - **The "Big Three" Posterolateral Static Stabilizers:**
   * **Popliteus Tendon:** Attaches in the anterior-inferior fifth of the popliteal sulcus on the lateral femoral condyle, passes through the popliteal hiatus, and unites with the PFL.
   * **Popliteofibular Ligament (PFL):** Connects the popliteus musculotendinous junction to the tip of the fibular styloid process, creating the biomechanical inverted 'Y' suspensory complex.
   * **Fibular Collateral Ligament (FCL):** Originates 1.4 mm posterior and 3.1 mm proximal to the lateral epicondyle and inserts on the lateral fibular head (precisely **18.5 mm** proximal-posterior to the popliteus femoral attachment).
+- **LaPrade Anatomic Reconstruction Surgical Overlay:**
+  * Two 9 mm femoral tunnels spaced at 18.5 mm (popliteal sulcus and FCL origin).
+  * 7 mm fibular tunnel and 9 mm posterior tibial tunnel with split allografts in inverted 'Y' construct.
 - **Dynamic 6-DOF Kinematic Articulation:**
   * Knee flexion arc (0° to 120°) with physiological femoral roll-and-glide.
   * **Terminal Extension "Screw-Home" Mechanism:** Obligatory external rotation of the tibia (6°-8°) from 15° to 0° extension, unlocked by popliteus internal rotation.
