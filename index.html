@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knee Posterolateral Corner (PLC) & Popliteus Complex Biomechanics</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Three.js & OrbitControls from reliable CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="logo-badge">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+        </svg>
+      </div>
+      <div class="brand-titles">
+        <h1>Knee Biomechanics & Posterolateral Corner Simulator</h1>
+        <p>Interactive 3D/2D Kinematic Modeling of the Popliteus Complex, LCL, ACL & PCL Injuries</p>
+      </div>
+    </div>
+
+    <div class="authorship-tag">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+      </svg>
+      <span>Based on Seminal Cadaveric Research by <strong>Dr. Robert F. LaPrade</strong> & <strong>Dr. Jorge Chahla</strong></span>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="app-container">
+
+    <!-- Left Control Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Preset Scenarios Section -->
+      <div class="control-panel-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            Injury Presets
+          </div>
+        </div>
+
+        <select id="presetSelect" class="preset-select">
+          <option value="intact">1. Intact Knee (Normal Baseline)</option>
+          <option value="isolated_popliteus">2. Isolated Popliteus Tendon Tear ("Fifth Ligament")</option>
+          <option value="popliteus_and_pfl">3. Popliteus Tendon + PFL Tear (Rotatory Laxity)</option>
+          <option value="isolated_fcl">4. Isolated FCL / LCL Tear (Varus Restraint Loss)</option>
+          <option value="complete_plc">5. Complete Grade III PLC (FCL + Popliteus + PFL)</option>
+          <option value="isolated_acl">6. Isolated ACL Tear (Anterior Instability)</option>
+          <option value="combined_acl_plc">7. Combined ACL + PLC (Fatal Graft Failure Risk)</option>
+          <option value="combined_pcl_plc">8. Combined PCL + PLC (Dial Test 30° & 90°)</option>
+          <option value="custom" disabled>Custom Multi-Ligament State</option>
+        </select>
+
+        <div class="preset-meta-card">
+          <div id="presetSubtitle" class="preset-subtitle">Baseline Control State</div>
+          <div id="presetDesc" class="preset-desc">Normal physiological restraints intact. Screw-home mechanism functional.</div>
+        </div>
+      </div>
+
+      <!-- Individual Structure Toggles -->
+      <div class="control-panel-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Ligament & Tendon Integrity
+          </div>
+        </div>
+
+        <div class="structures-grid">
+          <div id="toggle_popliteusTendon" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Popliteus Tendon (PT)</div>
+                <div class="struct-sub">Femoral sulcus & primary ER checkrein</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+
+          <div id="toggle_popliteofibularLigament" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Popliteofibular Ligament (PFL)</div>
+                <div class="struct-sub">Inverted 'Y' connection to fibular styloid</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+
+          <div id="toggle_fibularCollateralLigament" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Fibular Collateral Ligament (FCL)</div>
+                <div class="struct-sub">Primary static varus stabilizer</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+
+          <div id="toggle_anteriorCruciateLigament" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Anterior Cruciate Ligament (ACL)</div>
+                <div class="struct-sub">Primary anterior translation restraint</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+
+          <div id="toggle_posteriorCruciateLigament" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Posterior Cruciate Ligament (PCL)</div>
+                <div class="struct-sub">Posterior drawer & 90° secondary ER brake</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+
+          <div id="toggle_meniscopoplitealFascicles" class="structure-toggle-row">
+            <div class="struct-label-group">
+              <span class="struct-dot intact"></span>
+              <div>
+                <div class="struct-name">Meniscopopliteal Fascicles (MPF)</div>
+                <div class="struct-sub">Popliteal hiatus & lateral meniscus tether</div>
+              </div>
+            </div>
+            <span class="switch-pill intact">Intact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kinematics & Applied Loads Section -->
+      <div class="control-panel-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            Joint Kinematics & Applied Stress
+          </div>
+        </div>
+
+        <!-- Flexion Arc Slider -->
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Knee Flexion Angle:</span>
+            <span id="valFlexion" class="slider-value">0°</span>
+          </div>
+          <input id="sliderFlexion" type="range" min="0" max="120" value="0" step="1">
+          <div class="quick-buttons-row">
+            <button class="quick-btn" data-slider="sliderFlexion" data-val="0">0° (Extension)</button>
+            <button class="quick-btn" data-slider="sliderFlexion" data-val="30">30° (Dial Test)</button>
+            <button class="quick-btn" data-slider="sliderFlexion" data-val="60">60°</button>
+            <button class="quick-btn" data-slider="sliderFlexion" data-val="90">90° (PCL Check)</button>
+          </div>
+        </div>
+
+        <!-- External Rotation Torque -->
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">External Rotation Torque:</span>
+            <span id="valERTorque" class="slider-value">5.0 N·m</span>
+          </div>
+          <input id="sliderERTorque" type="range" min="0" max="10" value="5.0" step="0.5">
+          <div class="quick-buttons-row">
+            <button class="quick-btn" data-slider="sliderERTorque" data-val="0">0 Nm</button>
+            <button class="quick-btn" data-slider="sliderERTorque" data-val="5">5 Nm (Standard)</button>
+            <button class="quick-btn" data-slider="sliderERTorque" data-val="10">10 Nm (Max)</button>
+          </div>
+        </div>
+
+        <!-- Varus Stress Torque -->
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Varus Moment:</span>
+            <span id="valVarusTorque" class="slider-value">10.0 N·m</span>
+          </div>
+          <input id="sliderVarusTorque" type="range" min="0" max="15" value="10.0" step="0.5">
+          <div class="quick-buttons-row">
+            <button class="quick-btn" data-slider="sliderVarusTorque" data-val="0">0 Nm</button>
+            <button class="quick-btn" data-slider="sliderVarusTorque" data-val="10">10 Nm (Standard)</button>
+          </div>
+        </div>
+
+        <!-- Anterior Load -->
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Anterior Load (Lachman):</span>
+            <span id="valAntLoad" class="slider-value">0 N</span>
+          </div>
+          <input id="sliderAntLoad" type="range" min="0" max="134" value="0" step="2">
+        </div>
+
+        <!-- Posterior Load -->
+        <div class="slider-group">
+          <div class="slider-label-row">
+            <span class="slider-name">Posterior Load (Drawer):</span>
+            <span id="valPostLoad" class="slider-value">0 N</span>
+          </div>
+          <input id="sliderPostLoad" type="range" min="0" max="134" value="0" step="2">
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Visual Stage -->
+    <main class="main-stage">
+
+      <!-- Navigation Tabs Bar -->
+      <nav class="view-tabs-bar">
+        <button class="view-tab active" data-target="view-3d">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+          3D Anatomical Biomechanics
+        </button>
+
+        <button class="view-tab" data-target="view-dial">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v5l3 3"/></svg>
+          2D Axial Plateau & Dial Test
+        </button>
+
+        <button class="view-tab" data-target="view-charts">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          Kinematic Sectioning Graphs
+        </button>
+
+        <button class="view-tab" data-target="view-exams">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          Clinical Exam Simulator
+        </button>
+
+        <button class="view-tab" data-target="view-refs">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          Literature & Clinical Pearls
+        </button>
+      </nav>
+
+      <!-- TAB 1: 3D ANATOMICAL VIEWPORT -->
+      <div id="view-3d" class="view-container active">
+        <div id="viewport3d"></div>
+
+        <!-- Telemetry HUD Overlay -->
+        <div class="telemetry-hud">
+          <div class="hud-title-row">
+            <span class="hud-title">Kinematic Telemetry HUD</span>
+            <span style="font-size: 0.7rem; color: #38bdf8; font-family: var(--font-mono);">6-DOF LIVE</span>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="telemetry-card">
+              <span class="telem-label">Tibial Ext. Rotation</span>
+              <div class="telem-value-group">
+                <span id="hudER" class="telem-main-val">12.6°</span>
+                <span id="hudERDelta" class="telem-delta-val normal">(Normal)</span>
+              </div>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telem-label">Lateral Joint Opening</span>
+              <div class="telem-value-group">
+                <span id="hudVarusMm" class="telem-main-val">8.2 mm</span>
+                <span id="hudVarusDeltaMm" class="telem-delta-val normal">(Normal)</span>
+              </div>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telem-label">Varus Angulation</span>
+              <div class="telem-value-group">
+                <span id="hudVarusDeg" class="telem-main-val">5.5°</span>
+              </div>
+            </div>
+
+            <div class="telemetry-card">
+              <span class="telem-label">Ant / Post Trans</span>
+              <div class="telem-value-group">
+                <span id="hudAntTrans" class="telem-main-val">0.0</span>
+                <span style="font-size: 0.75rem; color: #94a3b8;">/</span>
+                <span id="hudPostTrans" class="telem-main-val">0.0</span>
+                <span style="font-size: 0.7rem; color: #64748b;">mm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACL Graft In-Situ Stress Gauge -->
+          <div class="acl-stress-gauge-card">
+            <div class="stress-header">
+              <span>ACL Graft In-Situ Stress Index:</span>
+              <span id="hudAclStressText" style="font-family: var(--font-mono); font-weight: 700;">100% (SAFE)</span>
+            </div>
+            <div class="stress-bar-wrapper">
+              <div id="hudAclStressBar" class="stress-bar-fill"></div>
+            </div>
+          </div>
+
+          <!-- Real-Time Clinical Interpretation Callout Banner -->
+          <div class="hud-callout-banner">
+            <span id="hudCalloutText">Normal physiological restraints intact. Popliteus tendon and FCL checkreins operating symmetrically.</span>
+          </div>
+        </div>
+
+        <!-- 3D Camera Controls Floating Bar -->
+        <div class="camera-controls-bar">
+          <button class="cam-btn active" data-view="anterolateral">Anterolateral</button>
+          <button class="cam-btn" data-view="posterolateral">Posterolateral ("Dark Side")</button>
+          <button class="cam-btn" data-view="lateral">True Lateral</button>
+          <button class="cam-btn" data-view="anterior">Anterior (AP)</button>
+          <button class="cam-btn" data-view="axial">Axial Plateau</button>
+        </div>
+      </div>
+
+      <!-- TAB 2: 2D AXIAL PLATEAU & PRONE DIAL TEST VIEW -->
+      <div id="view-dial" class="view-container">
+        <div class="dial-view-layout">
+          <!-- Left: Axial Plateau Inverted 'Y' Vector Mechanics -->
+          <div class="dial-card-panel">
+            <h3>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              Axial Cross-Section: Inverted 'Y' Vector Mechanics
+            </h3>
+            <div class="canvas-2d-wrapper">
+              <canvas id="axialCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Right: Prone Bilateral Dial Test Simulator -->
+          <div class="dial-card-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3>
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
+                Prone Dial Test Simulator (Bilateral Feet)
+              </h3>
+              <!-- 30° vs 90° Flexion Toggle Buttons -->
+              <div style="display: flex; gap: 4px;">
+                <button id="dialBtn30" class="cam-btn active">30° Flexion</button>
+                <button id="dialBtn90" class="cam-btn">90° Flexion</button>
+              </div>
+            </div>
+            <div class="canvas-2d-wrapper">
+              <canvas id="dialCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: KINEMATIC SECTIONING GRAPHS -->
+      <div id="view-charts" class="view-container">
+        <div class="charts-view-layout">
+          <div class="chart-card">
+            <div class="chart-canvas-box">
+              <canvas id="erChartCanvas"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-canvas-box">
+              <canvas id="varusChartCanvas"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card full-width">
+            <div class="chart-canvas-box">
+              <canvas id="aclChartCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: CLINICAL EXAM SIMULATOR -->
+      <div id="view-exams" class="view-container">
+        <div class="clinical-exams-layout">
+
+          <!-- Dial Test Card -->
+          <div class="exam-card">
+            <div class="exam-card-header">
+              <span class="exam-name">The Dial Test</span>
+              <span class="exam-badge badge-info">Rotational Stability</span>
+            </div>
+            <p class="exam-description">
+              Evaluates side-to-side difference in tibial external rotation under a 5 N·m torque at both <strong>30° and 90° of flexion</strong> in the prone position.
+            </p>
+            <button id="btnSimDial" class="exam-sim-btn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Simulate Dial Test (30° / 90°)
+            </button>
+            <div class="exam-result-box">
+              <strong>Key Diagnostic Criterion:</strong> An asymmetry of <strong>>10°</strong> at 30° flexion indicates an isolated PLC injury (Popliteus/PFL). Persistence or worsening at 90° indicates combined PCL + PLC rupture.
+            </div>
+          </div>
+
+          <!-- Varus Stress Test Card -->
+          <div class="exam-card">
+            <div class="exam-card-header">
+              <span class="exam-name">Varus Stress Test & Radiography</span>
+              <span class="exam-badge badge-warning">Coronal Stability</span>
+            </div>
+            <p class="exam-description">
+              Assesses lateral compartment gapping at 0° and 20°-30° flexion under a 10 N·m varus moment. Quantified on objective stress radiographs.
+            </p>
+            <button id="btnSimVarus" class="exam-sim-btn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Simulate Varus Stress Test
+            </button>
+            <div class="exam-result-box">
+              <strong>LaPrade Objective Thresholds:</strong><br>
+              • <strong>2.7 mm delta:</strong> Isolated complete FCL tear.<br>
+              • <strong>≥ 4.0 mm delta:</strong> Complete Grade III PLC disruption (FCL + Popliteus + PFL).
+            </div>
+          </div>
+
+          <!-- Reverse Pivot Shift Test Card -->
+          <div class="exam-card">
+            <div class="exam-card-header">
+              <span class="exam-name">Reverse Pivot Shift (Jakob / LaPrade)</span>
+              <span class="exam-badge badge-danger">Posterolateral Subluxation</span>
+            </div>
+            <p class="exam-description">
+              Begins at 80°-90° flexion with valgus and external rotation (causing posterolateral subluxation of the lateral tibial plateau) and extends towards 20°-30°.
+            </p>
+            <button id="btnSimReversePivot" class="exam-sim-btn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Animate Reverse Pivot Shift Clunk
+            </button>
+            <div class="exam-result-box">
+              <strong>Kinematic Mechanism:</strong> At 25°-30° flexion, the iliotibial band transitions from a flexor to an extensor, violently snapping the subluxated lateral plateau anteriorly into reduction.
+            </div>
+          </div>
+
+          <!-- Lachman & Pivot Shift Card -->
+          <div class="exam-card">
+            <div class="exam-card-header">
+              <span class="exam-name">Lachman & Pivot Shift (ACL + PLC)</span>
+              <span class="exam-badge badge-danger">Anterior & Rotatory</span>
+            </div>
+            <p class="exam-description">
+              Tests primary anterior translation (Lachman at 30°) and coupled rotatory subluxation (Pivot Shift). Demonstrates explosive Grade III shift when PLC is unaddressed.
+            </p>
+            <button id="btnSimLachman" class="exam-sim-btn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Simulate Lachman Load (134 N)
+            </button>
+            <div class="exam-result-box">
+              <strong>The Graft Hazard:</strong> If PLC laxity is missed during ACL reconstruction, forces on the ACL graft surge by up to 230% under gait moments, ensuring premature failure.
+            </div>
+          </div>
+
+          <!-- External Rotation Recurvatum Test Card -->
+          <div class="exam-card">
+            <div class="exam-card-header">
+              <span class="exam-name">External Rotation Recurvatum Test</span>
+              <span class="exam-badge badge-warning">Hughston / LaPrade</span>
+            </div>
+            <p class="exam-description">
+              Patient supine; great toes lifted. The knee with severe PLC or combined PCL/PLC tear falls into hyperextension, varus, and external rotation of the tibia.
+            </p>
+            <button id="btnSimRecurvatum" class="exam-sim-btn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Simulate Recurvatum Position
+            </button>
+            <div class="exam-result-box">
+              <strong>Pathology:</strong> Loss of the posterior capsular and popliteofibular restraints permits unconstrained recurvatum and lateral dropoff.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 5: ACADEMIC LITERATURE & CLINICAL PEARLS -->
+      <div id="view-refs" class="view-container">
+        <div class="references-layout">
+
+          <div class="ref-intro-card">
+            <h2>The Anatomical & Biomechanical Legacy of Robert F. LaPrade & Jorge Chahla</h2>
+            <p>
+              Historically known as the "dark side of the knee" due to unpredictable outcomes of non-anatomic repairs and high rates of cruciate reconstruction failure, the posterolateral corner (PLC) was demystified through rigorous quantitative anatomical mapping and robotic sectioning studies by <strong>Dr. Robert F. LaPrade</strong> and his fellow <strong>Dr. Jorge Chahla</strong> (complex knee surgeon, originally from Tucumán, Argentina).
+            </p>
+            <p style="margin-top: 6px;">
+              Their work proved that the <strong>Popliteus Tendon</strong> acts as the "fifth ligament" of the knee—a primary static and dynamic restraint against external tibial rotation—working in an inverted 'Y' construct with the <strong>Popliteofibular Ligament (PFL)</strong> and the <strong>Fibular Collateral Ligament (FCL)</strong>. Crucially, they demonstrated that unaddressed posterolateral instability exposes ACL and PCL reconstruction grafts to catastrophic force spikes, leading to early graft elongation and failure.
+            </p>
+          </div>
+
+          <!-- Landmark Papers Cards Grid -->
+          <div id="referencesListContainer" class="paper-cards-grid">
+            <!-- Dynamically populated from knee-biomechanics-data.js -->
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="knee-biomechanics-data.js"></script>
+  <script src="knee-3d-model.js"></script>
+  <script src="knee-2d-dial.js"></script>
+  <script src="knee-charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
